@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian University | Events &amp; Registration Portal</title>
+
+<!-- External stylesheet: primary CSS method used for the whole site -->
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+<!--
+  INTERNAL CSS DEMONSTRATION
+  Scoped deliberately to the hero section only, as required by the brief.
+  Everything else lives in style.css (external sheet).
+-->
+<style>
+  #hero {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(200, 155, 60, 0.16), transparent 45%),
+      linear-gradient(160deg, #0F1B33 0%, #1B2A4A 60%, #223662 100%);
+  }
+  #hero .hero-eyebrow {
+    letter-spacing: 0.14em;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="top">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">M</span>
+      <div class="brand-text">
+        <span class="brand-university">Meridian University</span>
+        <span class="brand-portal">Events &amp; Registration Portal</span>
+      </div>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="site-nav" id="siteNav" aria-label="Primary">
+      <ul class="nav-menu">
+        <li><a href="#top">Home</a></li>
+        <li><a href="#catalogue">Events</a></li>
+        <li><a href="#register">Register</a></li>
+        <li><a href="#footer">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">4TH ANNUAL CAMPUS SEASON</p>
+    <h1 class="hero-title">Four days.<br>One campus.<br><span style="color:#C89B3C; font-style: italic;">Every</span> kind of ambitious.</h1>
+    <p class="hero-sub">Hackathons, placement drives, cultural nights and championship finals — one registration portal for all of it.</p>
+
+    <div class="hero-meta">
+      <div class="hero-date">
+        <span class="hero-date-label">Campaign period</span>
+        <span class="hero-date-value">18 – 21 March 2027</span>
+      </div>
+      <a href="#catalogue" class="cta-button" id="hero-cta">Browse Events &amp; Register →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EVENT CATALOGUE ============ -->
+<section class="catalogue" id="catalogue">
+  <div class="section-heading">
+    <span class="section-kicker">The Lineup</span>
+    <h2>Choose your event</h2>
+    <p>Every card below is a ticket in progress — pick one, check the status, and register at the bottom of the page.</p>
+  </div>
+
+  <div class="event-grid">
+
+    <!-- Card 1 -->
+    <article class="event-card" data-status="open">
+      <div class="status-badge status-open">Open</div>
+      <div class="card-main">
+        <span class="card-category cat-technical">Technical</span>
+        <h3>CodeMeridian Hackathon</h3>
+        <ul class="card-facts">
+          <li><strong>Date:</strong> 19 Mar 2027, 9:00 AM</li>
+          <li><strong>Venue:</strong> Innovation Block, Lab 4</li>
+        </ul>
+        <p class="card-desc">24-hour build sprint for teams of up to four. Open track, bring your own idea.</p>
+      </div>
+      <div class="card-stub">
+        <span class="stub-label">Admit team</span>
+        <button class="stub-btn">Register</button>
+      </div>
+    </article>
+
+    <!-- Card 2 -->
+    <article class="event-card" data-status="filling">
+      <div class="status-badge status-filling">Filling Fast</div>
+      <div class="card-main">
+        <span class="card-category cat-cultural">Cultural</span>
+        <h3>Meridian Cultural Night</h3>
+        <ul class="card-facts">
+          <li><strong>Date:</strong> 20 Mar 2027, 6:30 PM</li>
+          <li><strong>Venue:</strong> Open-Air Amphitheatre</li>
+        </ul>
+        <p class="card-desc">Music, dance and spoken word from every department. Solo and group slots available.</p>
+      </div>
+      <div class="card-stub">
+        <span class="stub-label">Admit one</span>
+        <button class="stub-btn">Register</button>
+      </div>
+    </article>
+
+    <!-- Card 3 -->
+    <article class="event-card" data-status="open">
+      <div class="status-badge status-open">Open</div>
+      <div class="card-main">
+        <span class="card-category cat-placement">Placement</span>
+        <h3>Career Readiness Summit</h3>
+        <ul class="card-facts">
+          <li><strong>Date:</strong> 20 Mar 2027, 10:00 AM</li>
+          <li><strong>Venue:</strong> Placement Cell Auditorium</li>
+        </ul>
+        <p class="card-desc">Mock interviews, resume clinics and recruiter panels from twelve partner companies.</p>
+      </div>
+      <div class="card-stub">
+        <span class="stub-label">Admit one</span>
+        <button class="stub-btn">Register</button>
+      </div>
+    </article>
+
+    <!-- Card 4 -->
+    <article class="event-card" data-status="closed">
+      <div class="status-badge status-closed">Closed</div>
+      <div class="card-main">
+        <span class="card-category cat-sports">Sports</span>
+        <h3>Inter-Department Championship</h3>
+        <ul class="card-facts">
+          <li><strong>Date:</strong> 21 Mar 2027, 7:00 AM</li>
+          <li><strong>Venue:</strong> Meridian Sports Complex</li>
+        </ul>
+        <p class="card-desc">Athletics and team-sport finals. Team registrations closed; spectator entry is free.</p>
+      </div>
+      <div class="card-stub">
+        <span class="stub-label">Registrations closed</span>
+        <button class="stub-btn" disabled>Full</button>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ REGISTRATION FORM ============ -->
+<section class="registration" id="register">
+  <div class="registration-panel">
+    <div class="section-heading">
+      <span class="section-kicker">Last Step</span>
+      <h2>Complete your registration</h2>
+      <p>One form covers every event on the portal — just select which one you're attending.</p>
+    </div>
+
+    <form id="registration-form" class="reg-form" novalidate>
+      <div class="form-row">
+        <label for="stu-name">Full name</label>
+        <input type="text" id="stu-name" name="stu-name" placeholder="e.g. Aditi Rao" required>
+      </div>
+
+      <div class="form-row">
+        <label for="reg-number">Register number</label>
+        <input type="text" id="reg-number" name="reg-number" placeholder="e.g. 21ITB045" required>
+      </div>
+
+      <div class="form-row">
+        <label for="department">Department</label>
+        <select id="department" name="department" required>
+          <option value="" disabled selected>Select department</option>
+          <option value="cse">Computer Science &amp; Engineering</option>
+          <option value="it">Information Technology</option>
+          <option value="ece">Electronics &amp; Communication</option>
+          <option value="mech">Mechanical Engineering</option>
+          <option value="civil">Civil Engineering</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@meridian.edu" required>
+      </div>
+
+      <div class="form-row form-row-wide">
+        <label for="event-select">Event</label>
+        <select id="event-select" name="event-select" required>
+          <option value="" disabled selected>Select an event</option>
+          <option value="hackathon">CodeMeridian Hackathon</option>
+          <option value="cultural">Meridian Cultural Night</option>
+          <option value="placement">Career Readiness Summit</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-button">Submit Registration</button>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" id="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <span class="brand-mark small" aria-hidden="true">M</span>
+      <p class="footer-blurb">Meridian University Events Office<br>Organising campus-wide programmes since 1998.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p>events@meridian.edu<br>+91 44 2345 6789<br>Block C, Student Affairs Wing</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Useful links</h4>
+      <ul class="footer-links">
+        <li><a href="#catalogue">Event catalogue</a></li>
+        <li><a href="#register">Registration form</a></li>
+        <li><a href="#top">Back to top</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2027 Meridian University. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- ============ FIXED HELP BUTTON (positioning demo) ============ -->
+<a href="#register" class="quick-register" aria-label="Jump to registration form">Register →</a>
+
+<script>
+  // Minimal interactivity: mobile nav toggle only (no framework required)
+  const navToggle = document.getElementById('navToggle');
+  const siteNav = document.getElementById('siteNav');
+  navToggle.addEventListener('click', () => {
+    const isOpen = siteNav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Prevent actual submission for this static demo; show inline confirmation
+  document.getElementById('registration-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    this.querySelector('.submit-button').textContent = 'Registered ✓';
+  });
+</script>
+
+</body>
+</html>

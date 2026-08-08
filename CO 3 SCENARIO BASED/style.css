@@ -1,0 +1,658 @@
+/* ==========================================================================
+   MERIDIAN UNIVERSITY — EVENT REGISTRATION PORTAL
+   Primary external stylesheet.
+
+   CSS METHOD JUSTIFICATION (for technical note):
+   External CSS is used here because the site has repeating structural
+   elements (header, cards, form, footer) that must stay visually
+   consistent if more pages are added later (e.g. an "Events" or
+   "Past Winners" page). One shared file means a single change updates
+   every page, which inline or internal CSS cannot do across files.
+   ========================================================================== */
+
+/* ---------- 1. RESET & ROOT TOKENS ---------- */
+* ,
+*::before,
+*::after {
+  box-sizing: border-box; /* border-box applied globally, see note below */
+}
+
+:root {
+  --navy-deep:   #0F1B33;
+  --navy:        #1B2A4A;
+  --navy-soft:   #223662;
+  --paper:       #F5F4EF;
+  --paper-card:  #FFFFFF;
+  --brass:       #C89B3C;
+  --brass-dark:  #A87F2C;
+  --ink:         #1B2A4A;
+  --ink-muted:   #5B647A;
+  --green:       #3F7D58;
+  --amber:       #B9812E;
+  --rust:        #A2452E;
+  --border-soft: #E3E0D6;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body:    "Inter", system-ui, sans-serif;
+  --font-mono:    "IBM Plex Mono", monospace;
+
+  --max-width: 1180px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* guards against any accidental horizontal scroll */
+}
+
+/* Group selector: consistent heading rhythm across all heading levels */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--navy);
+  margin: 0 0 0.4em;
+  line-height: 1.15;
+}
+
+p {
+  margin: 0 0 1em;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------- 2. HEADER / NAVIGATION (sticky positioning demo) ---------- */
+.site-header {
+  position: sticky;   /* beyond-normal-flow technique #1: sticky */
+  top: 0;
+  z-index: 50;         /* z-index demo: stays above hero + cards */
+  background: rgba(15, 27, 51, 0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(200, 155, 60, 0.25);
+}
+
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ID selector used once, for the single unique brand mark in the header */
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(150deg, var(--brass), var(--brass-dark));
+  color: var(--navy-deep);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+}
+.brand-mark.small { width: 30px; height: 30px; font-size: 14px; }
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.brand-university {
+  font-family: var(--font-display);
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+}
+.brand-portal {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+/* Child combinator: only direct <li> children of .nav-menu, not nested lists */
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+}
+.nav-menu > li > a {
+  color: #E9E6DC;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 2px;
+  position: relative;      /* enables the ::after underline below */
+}
+/* Pseudo-element + hover state: animated underline on nav links */
+.nav-menu > li > a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 2px;
+  background: var(--brass);
+  transition: width 0.25s ease;
+}
+.nav-menu > li > a:hover::after,
+.nav-menu > li > a:focus-visible::after {
+  width: 100%;
+}
+.nav-menu > li > a:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 4px;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+.nav-toggle span {
+  width: 22px;
+  height: 2px;
+  background: #fff;
+}
+
+/* ---------- 3. HERO ---------- */
+/* Background gradient itself lives in the internal <style> block per the
+   assignment's requirement to demonstrate internal CSS on one section;
+   layout/typography rules for the same section stay here in the external
+   sheet, which is a normal split between visual theme and structure. */
+#hero {
+  padding: 90px 24px 110px;
+  color: #fff;
+}
+.hero-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--brass);
+  margin-bottom: 18px;
+}
+.hero-title {
+  color: #fff;
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 600;
+}
+.hero-sub {
+  color: #C7CCDA;
+  font-size: 16px;
+  max-width: 520px;
+  margin: 20px auto 34px;
+}
+.hero-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+.hero-date {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hero-date-label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8891A6;
+}
+.hero-date-value {
+  font-family: var(--font-mono);
+  color: var(--brass);
+  font-size: 15px;
+}
+
+/* Pseudo-class + transform/transition used purposefully: lift on hover */
+.cta-button {
+  display: inline-block;
+  background: var(--brass);
+  color: var(--navy-deep);
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 999px;
+  box-shadow: 0 10px 24px rgba(200, 155, 60, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.cta-button:hover,
+.cta-button:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(200, 155, 60, 0.38);
+}
+
+/* ---------- 4. EVENT CATALOGUE — CSS GRID LAYOUT ---------- */
+.catalogue {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 80px 24px 40px;
+}
+.section-heading {
+  max-width: 560px;
+  margin: 0 auto 44px;
+  text-align: center;
+}
+.section-kicker {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--brass-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.section-heading h2 {
+  font-size: 30px;
+}
+
+/* Multi-column on large screens, collapsing via media queries below */
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 26px;
+}
+
+/* Box model showcase: content + padding + border + margin on every card.
+   ----------------------------------------------------------------------
+   BOX-MODEL CALCULATION (default content-box, before the global
+   box-sizing:border-box reset above is considered):
+     content width : 260px
+     padding       : 22px left + 22px right = 44px
+     border        : 1px left + 1px right   =  2px
+     ----------------------------------------------------
+     total rendered width = 260 + 44 + 2      = 306px
+   Margin (18px each side, 36px total) is NOT part of the element's own
+   width — it only affects the space it occupies among its siblings.
+   Because this project applies box-sizing:border-box globally, setting
+   width:306px on the card would instead make padding+border eat into
+   that 306px, shrinking the visible content area to 260px automatically
+   — the two models trade off which figure (content vs total box) stays
+   fixed when padding/border change. */
+.event-card {
+  position: relative;      /* anchors the absolute status badge below */
+  background: var(--paper-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 22px;
+  margin: 0;
+  box-shadow: 0 6px 18px rgba(27, 42, 74, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px rgba(27, 42, 74, 0.12);
+}
+
+/* Attribute selector: style differently depending on data-status value */
+.event-card[data-status="closed"] {
+  opacity: 0.72;
+}
+
+/* Beyond-normal-flow technique #2: absolutely positioned status badge,
+   layered above card content with z-index */
+.status-badge {
+  position: absolute;
+  top: 16px;
+  right: -30px;
+  z-index: 5;
+  transform: rotate(38deg);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 4px 34px;
+  color: #fff;
+}
+.status-open    { background: var(--green); }
+.status-filling { background: var(--amber); }
+.status-closed  { background: var(--rust); }
+
+.card-category {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  width: fit-content;
+}
+.cat-technical { background: #E7EEFB; color: #2E4E8F; }
+.cat-cultural  { background: #FBEAE7; color: #A2452E; }
+.cat-placement { background: #E9F4EC; color: #2E6B45; }
+.cat-sports    { background: #FBF1E1; color: #A87F2C; }
+
+.event-card h3 {
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+
+/* Descendant selector: any list item inside .card-facts, however nested */
+.card-facts {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.card-facts li {
+  margin-bottom: 4px;
+}
+.card-facts strong {
+  color: var(--ink);
+}
+
+.card-desc {
+  font-size: 14px;
+  margin-bottom: 0;
+  flex-grow: 1;
+}
+
+/* "Ticket stub" divider — the page's signature visual device */
+.card-stub {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 2px dashed var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+/* Pseudo-elements cut circular notches into the card edges at the
+   dashed line, mimicking a torn admission-ticket stub */
+.card-stub::before,
+.card-stub::after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--border-soft);
+}
+.card-stub::before { left: -32px; }
+.card-stub::after   { right: -32px; }
+
+.stub-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+.stub-btn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.stub-btn:hover:not(:disabled) {
+  background: var(--brass-dark);
+}
+.stub-btn:disabled {
+  background: var(--ink-muted);
+  cursor: not-allowed;
+  visibility: visible; /* still shown, just disabled — demonstrates visibility control */
+}
+
+/* ---------- 5. REGISTRATION FORM ---------- */
+.registration {
+  background: var(--navy-deep);
+  padding: 80px 24px;
+  margin-top: 40px;
+}
+.registration .section-heading h2,
+.registration .section-heading p {
+  color: #fff;
+}
+.registration .section-heading p {
+  color: #AEB6C9;
+}
+.registration-panel {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.reg-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 24px;
+  background: var(--paper-card);
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-row-wide {
+  grid-column: 1 / -1;
+}
+.form-row label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+/* Group selector: identical base styling for both input types and selects */
+.form-row input,
+.form-row select {
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 11px 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.form-row input:focus,
+.form-row select:focus {
+  outline: none;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.22);
+}
+.form-row input::placeholder {
+  color: #A9AEBC;
+}
+
+/* Attribute selector on the email field specifically */
+input[type="email"] {
+  cursor: text;
+}
+
+.submit-button {
+  grid-column: 1 / -1;
+  background: var(--brass);
+  color: var(--navy-deep);
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  margin-top: 6px;
+}
+.submit-button:hover {
+  transform: translateY(-2px);
+}
+
+/* ---------- 6. FOOTER ---------- */
+.site-footer {
+  background: var(--navy);
+  color: #C7CCDA;
+  padding: 56px 24px 0;
+}
+.footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.footer-col {
+  flex: 1 1 200px;
+}
+.footer-col h4 {
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.footer-blurb {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #9AA2B8;
+}
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-links li {
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.footer-links li a:hover {
+  color: var(--brass);
+}
+.footer-bottom {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 18px 0;
+  font-size: 12px;
+  color: #7A8299;
+  text-align: center;
+}
+
+/* ---------- 7. FIXED QUICK-REGISTER BUTTON ---------- */
+/* Beyond-normal-flow technique #3 (bonus): fixed positioning */
+.quick-register {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 60;
+  background: var(--navy);
+  color: #fff;
+  border: 1px solid var(--brass);
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 10px 24px rgba(15, 27, 51, 0.35);
+  transition: transform 0.2s ease;
+}
+.quick-register:hover {
+  transform: translateY(-3px);
+}
+
+/* ==========================================================================
+   8. RESPONSIVE DESIGN
+   Breakpoints tested at a desktop viewport and at ~375px (mobile).
+   ========================================================================== */
+
+/* Tablet: drop from 4 columns to 2 */
+@media (max-width: 900px) {
+  .event-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .reg-form {
+    grid-template-columns: 1fr;
+  }
+  .form-row-wide {
+    grid-column: auto;
+  }
+}
+
+/* Mobile (~375px and below): single column, collapsible nav */
+@media (max-width: 640px) {
+  .event-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .site-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--navy-deep);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+  .site-nav.open {
+    max-height: 260px;
+  }
+  .nav-menu {
+    flex-direction: column;
+    padding: 16px 24px;
+    gap: 16px;
+  }
+
+  #hero {
+    padding: 60px 20px 80px;
+  }
+  .hero-title {
+    font-size: 30px;
+  }
+
+  .status-badge {
+    right: -34px;
+    top: 14px;
+  }
+
+  .card-stub::before { left: -20px; }
+  .card-stub::after  { right: -20px; }
+
+  .quick-register {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+}
