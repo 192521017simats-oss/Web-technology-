@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saveetha Engineering College — Student Records Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1: #120b2e;
+    --bg-2: #1c1147;
+    --violet: #8b5cf6;
+    --violet-deep: #6d28d9;
+    --teal: #14b8a6;
+    --coral: #fb7185;
+    --amber: #fbbf24;
+    --ink: #1e1b3a;
+    --ink-soft: rgba(30,27,58,0.58);
+    --glass-border: rgba(255,255,255,0.55);
+    --card-bg: rgba(255,255,255,0.86);
+    --field-bg: rgba(255,255,255,0.9);
+    --line: rgba(30,27,58,0.12);
+    --shadow: 0 30px 70px rgba(18,11,46,0.5);
+    --shadow-sm: 0 14px 34px rgba(18,11,46,0.14);
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    color: var(--ink);
+    min-height:100vh;
+    background:
+      radial-gradient(900px 600px at 82% -8%, rgba(20,184,166,0.35) 0%, transparent 60%),
+      radial-gradient(1000px 700px at -10% 10%, rgba(139,92,246,0.45) 0%, transparent 55%),
+      radial-gradient(800px 500px at 50% 105%, rgba(251,113,133,0.22) 0%, transparent 60%),
+      linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    background-attachment: fixed;
+  }
+  a{ color:inherit; }
+  .mono{ font-family:'Space Mono', monospace; }
+
+  /* ============ MASTHEAD ============ */
+  .masthead{ padding: 30px 24px 18px; }
+  .masthead-inner{
+    max-width: 1120px; margin: 0 auto;
+    display:flex; align-items:center; gap: 16px;
+  }
+  .crest{
+    width: 48px; height: 48px; flex-shrink:0; border-radius: 14px;
+    background: linear-gradient(135deg, var(--violet), var(--teal));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 8px 22px rgba(139,92,246,0.4);
+  }
+  .crest svg{ width:26px; height:26px; }
+  .college-id{ color: #fff; }
+  .college-id .eyebrow{
+    font-family:'Space Mono', monospace; font-size: 10px;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal);
+    margin-bottom: 3px;
+  }
+  .college-id h1{
+    font-family:'Sora', sans-serif; font-weight: 700;
+    font-size: clamp(18px, 2.4vw, 24px); margin: 0; letter-spacing: -0.01em;
+  }
+  .college-id .aff{
+    font-size: 11.5px; color: rgba(255,255,255,0.5); margin-top: 4px;
+  }
+  .pill-badge{
+    margin-left:auto;
+    font-family:'Space Mono', monospace; font-size: 10.5px;
+    color: #fff; background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 7px 14px; border-radius: 999px; letter-spacing: 0.04em;
+    display:none;
+  }
+  @media (min-width: 640px){ .pill-badge{ display:inline-block; } }
+
+  /* ============ HERO ============ */
+  .hero{
+    max-width: 900px; margin: 0 auto; padding: 56px 24px 16px;
+    text-align:center; color: #fff;
+  }
+  .hero .tag{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Space Mono', monospace; font-size: 10.5px;
+    letter-spacing: 0.2em; text-transform: uppercase; color: #fff;
+    background: linear-gradient(90deg, var(--violet), var(--teal));
+    padding: 7px 16px; border-radius: 999px; margin-bottom: 24px;
+  }
+  .hero h2{
+    font-family:'Sora', sans-serif; font-weight: 800;
+    font-size: clamp(32px, 5.6vw, 56px); line-height: 1.08; margin: 0 0 18px;
+    letter-spacing: -0.02em;
+  }
+  .hero h2 .grad{
+    background: linear-gradient(90deg, #a78bfa, #5eead4);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p{
+    max-width: 540px; margin: 0 auto; color: rgba(255,255,255,0.6);
+    font-size: 15px; line-height: 1.65;
+  }
+
+  /* ============ PILL TABS ============ */
+  .tab-dock{ max-width: 1120px; margin: 38px auto 0; padding: 0 24px; display:flex; justify-content:center; }
+  .tabs{
+    display:inline-flex; gap: 4px; padding: 5px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px; backdrop-filter: blur(14px);
+  }
+  .tab-btn{
+    background: transparent; border: none; color: rgba(255,255,255,0.6);
+    font-family:'Sora', sans-serif; font-weight:600; font-size: 13px;
+    padding: 12px 22px; border-radius: 999px; cursor:pointer;
+    transition: background .18s ease, color .18s ease;
+    display:flex; align-items:center; gap:8px;
+  }
+  .tab-btn .dot{ width:7px; height:7px; border-radius:50%; background: currentColor; opacity:0.5; }
+  .tab-btn.active{
+    background: linear-gradient(90deg, var(--violet), #a78bfa);
+    color: #fff; box-shadow: 0 8px 20px rgba(139,92,246,0.45);
+  }
+  .tab-btn.active .dot{ background: var(--teal); opacity:1; }
+  .tab-btn:not(.active):hover{ color: #fff; }
+
+  /* ============ STAGE ============ */
+  .sheet-wrap{ max-width: 1080px; margin: 32px auto 60px; padding: 0 24px; }
+  .stage{
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .panel{ display:none; padding: 44px 40px 20px; }
+  .panel.active{ display:block; animation: fadeUp .4s ease both; }
+  @keyframes fadeUp{ from{ opacity:0; transform: translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel-head{ margin-bottom: 30px; }
+  .panel-head .kicker{
+    display:inline-block;
+    font-family:'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--violet-deep);
+    background: rgba(139,92,246,0.1); padding: 5px 12px; border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .panel-head h3{
+    font-family:'Sora', sans-serif; font-weight:700; font-size: 27px; margin: 0 0 6px; letter-spacing:-0.01em;
+  }
+  .panel-head p{ font-size: 13.5px; color: var(--ink-soft); margin:0; max-width:480px; }
+
+  /* ============ shared form styling ============ */
+  .desk-grid{ display:grid; grid-template-columns: 1fr; gap: 28px; }
+  @media (min-width: 880px){ .desk-grid{ grid-template-columns: 360px 1fr; align-items:start; } }
+
+  .field{ margin-bottom: 16px; }
+  .row3{ display:grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .subject-rows{ display:flex; flex-direction:column; gap: 8px; }
+  .subject-row{ display:grid; grid-template-columns: 1fr 84px; gap: 8px; }
+  .subject-row input[type="number"]{ text-align:center; }
+
+  .field label{
+    display:block; font-family:'Sora', sans-serif; font-weight:600; font-size: 11.5px;
+    text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .field input, .field select{
+    width:100%; padding: 13px 14px; font-family:'Inter', sans-serif;
+    font-size: 14.5px; color: var(--ink); background: var(--field-bg);
+    border: 1.5px solid var(--line); border-radius: 12px; outline:none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .field input:focus, .field select:focus{
+    border-color: var(--violet); box-shadow: 0 0 0 4px rgba(139,92,246,0.14);
+  }
+  .field.error input, .field.error select{
+    border-color: var(--coral); box-shadow: 0 0 0 4px rgba(251,113,133,0.14);
+  }
+  .field .msg{ display:none; font-size: 11.5px; color: var(--coral); margin-top: 6px; font-weight:500; }
+  .field.error .msg{ display:block; }
+
+  .actions{ display:flex; gap: 10px; margin-top: 22px; }
+  button{
+    font-family:'Sora', sans-serif; font-weight:600; font-size: 12.5px; letter-spacing: 0.01em;
+    padding: 13px 18px; border-radius: 12px; border: none;
+    cursor:pointer; transition: transform .12s ease, filter .12s ease, opacity .12s ease, box-shadow .12s ease;
+    flex:1;
+  }
+  button:active{ transform: translateY(1px); }
+  .btn-primary{
+    background: linear-gradient(90deg, var(--violet), var(--violet-deep));
+    color: #fff; box-shadow: 0 10px 24px rgba(139,92,246,0.38);
+  }
+  .btn-primary:hover{ filter:brightness(1.08); }
+  .btn-ghost{ background: rgba(251,113,133,0.08); color: #e11d48; border: 1.5px solid rgba(251,113,133,0.3); }
+  .btn-ghost:hover{ background: rgba(251,113,133,0.16); }
+  .btn-ghost:disabled{ opacity:0.35; cursor:not-allowed; }
+
+  .preview-panel{ min-height: 380px; padding: 4px; }
+  .placeholder{
+    color: rgba(30,27,58,0.35); font-family:'Inter', sans-serif; font-size: 13px;
+    text-align:center; padding: 100px 18px; border: 1.5px dashed var(--line);
+    border-radius: 18px; width:100%;
+  }
+
+  .card-stack{ width:100%; display:flex; flex-direction:column; gap: 14px; }
+  .roster-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:'Sora', sans-serif; font-weight:600; font-size: 11px; letter-spacing: 0.02em;
+    text-transform: uppercase; color: var(--ink-soft); margin-bottom: 18px; width:100%;
+  }
+  .roster-head .count{ color: var(--violet-deep); font-weight:700; }
+
+  .year-section{ width:100%; margin-bottom: 24px; }
+  .year-section:last-child{ margin-bottom: 0; }
+  .year-header{ display:flex; align-items:center; gap: 10px; margin-bottom: 12px; }
+  .year-header .year-label{
+    font-family:'Sora', sans-serif; font-weight:700; font-size: 12.5px;
+    color: #fff; background: linear-gradient(90deg, var(--teal), #0891b2);
+    border-radius: 999px; padding: 5px 14px; white-space:nowrap;
+  }
+  .year-header .year-count{
+    font-family:'Space Mono', monospace; font-size: 10px; letter-spacing: 0.04em;
+    color: var(--ink-soft); text-transform: uppercase;
+  }
+  .year-header::after{ content:""; flex:1; height:1px; background: var(--line); }
+
+  .profile-card, .result-card, .error-card{
+    width:100%; max-width: 520px; background: #ffffff; position:relative;
+    opacity:0; transform: translateY(14px) scale(0.98);
+    animation: riseIn .5s cubic-bezier(.2,.8,.2,1) forwards;
+    border: 1px solid var(--line);
+    border-radius: 18px; overflow:hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  @keyframes riseIn{ to{ opacity:1; transform: translateY(0) scale(1); } }
+
+  .band{
+    background: linear-gradient(90deg, var(--ink), #3b3560);
+    color: #fff; padding: 15px 18px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .band .role{
+    font-family:'Space Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #5eead4;
+  }
+  .band .band-right{ display:flex; align-items:center; gap: 8px; }
+  .stamp{
+    font-family:'Sora', sans-serif; font-weight:600; font-size: 10px; letter-spacing: 0.03em;
+    padding: 5px 11px; border-radius: 999px; border: none;
+  }
+  .stamp.neutral{ color: #1e1b3a; background: var(--amber); }
+  .stamp.pass{ color: #fff; background: linear-gradient(90deg, #10b981, #14b8a6); }
+  .stamp.fail{ color: #fff; background: linear-gradient(90deg, #fb7185, #e11d48); }
+  .card-remove{
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(255,255,255,0.14); color: #fff;
+    border: none;
+    font-family:'Inter', sans-serif; font-size: 14px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; padding:0; flex:none;
+    transition: background .15s ease;
+  }
+  .card-remove:hover{ background: var(--coral); }
+
+  .card-body{ padding: 20px 20px 20px; }
+  .card-body .name{ font-family:'Sora', sans-serif; font-weight:700; font-size: 21px; margin: 0 0 4px; }
+  .card-body .regno{ font-family:'Space Mono', monospace; letter-spacing: 0.04em; font-size: 11.5px; color: var(--violet-deep); margin: 0 0 16px; }
+
+  .profile-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; border-top: 1px dashed var(--line); padding-top: 16px; }
+  .profile-grid .k, table.marks th{
+    font-family:'Sora', sans-serif; font-weight:600; font-size: 9.5px; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px;
+  }
+  .profile-grid .v{ font-size: 14.5px; font-weight: 500; }
+
+  table.marks{ width:100%; border-collapse:collapse; margin-top: 4px; }
+  table.marks th{ text-align:left; padding: 7px 3px; border-bottom: 1px dashed var(--line); }
+  table.marks td{ padding: 9px 3px; font-size: 14px; font-weight:500; border-bottom: 1px dashed var(--line); }
+
+  .stats{ display:grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 16px; }
+  .stat{
+    background: linear-gradient(160deg, rgba(139,92,246,0.08), rgba(20,184,166,0.08));
+    border: 1px solid var(--line); border-radius: 12px; padding: 12px; text-align:center;
+  }
+  .stat .k{ font-family:'Sora', sans-serif; font-weight:600; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 5px; }
+  .stat .v{ font-family:'Sora', sans-serif; font-weight:700; font-size: 19px; }
+
+  .error-card .card-body{ padding: 18px 20px; }
+  .error-card h4{ margin: 0 0 8px; color: #e11d48; font-family:'Sora', sans-serif; font-size: 16px; }
+  .error-card p{ margin:0; font-size: 13.5px; line-height:1.6; }
+
+  .removing{ animation: fallOut .35s ease forwards; }
+  @keyframes fallOut{ to{ opacity:0; transform: translateY(8px) scale(0.97); } }
+
+  .note{
+    font-size: 11.5px; color: var(--ink-soft); font-family:'Inter', sans-serif;
+    margin-top: 20px; line-height:1.6; border-top: 1px dashed var(--line); padding-top: 14px;
+  }
+
+  footer{
+    text-align:center; padding: 10px 24px 54px;
+    color: rgba(255,255,255,0.4); font-family:'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ MASTHEAD ============ -->
+  <div class="masthead">
+    <div class="masthead-inner">
+      <div class="crest">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3L2 8l10 5 10-5-10-5z" fill="#fff" fill-opacity="0.95"/>
+          <path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5" stroke="#fff" stroke-width="1.6" fill="none"/>
+          <line x1="20" y1="8" x2="20" y2="15" stroke="#fff" stroke-width="1.6"/>
+        </svg>
+      </div>
+      <div class="college-id">
+        <div class="eyebrow">Office of the Registrar</div>
+        <h1>Saveetha Engineering College</h1>
+        <div class="aff">Autonomous Institution &middot; Affiliated to Anna University</div>
+      </div>
+      <div class="pill-badge">Records Portal v2</div>
+    </div>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    <span class="tag">Student Records Portal</span>
+    <h2>Every student, <span class="grad">beautifully</span><br>on record.</h2>
+    <p>Two live demonstrations from the department's web technology lab — an instant registration board and a result-processing panel, built for Saveetha Engineering College.</p>
+  </div>
+
+  <!-- ============ TAB DOCK ============ -->
+  <div class="tab-dock">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="reg"><span class="dot"></span>Student Registration</button>
+      <button class="tab-btn" data-tab="res"><span class="dot"></span>Result Processing</button>
+    </div>
+  </div>
+
+  <!-- ============ STAGE ============ -->
+  <div class="sheet-wrap">
+    <div class="stage">
+
+      <!-- PANEL 1: REGISTRATION (DOM demo) -->
+      <section class="panel active" id="panel-reg">
+        <div class="panel-head">
+          <div class="kicker">Client-Side Preview</div>
+          <h3>Student Registration Board</h3>
+          <p>Draft a profile instantly using DOM methods — nothing leaves the browser until you submit.</p>
+        </div>
+
+        <div class="desk-grid">
+          <form id="regForm" novalidate>
+            <div class="field" id="field-name">
+              <label for="studentName">Full Name</label>
+              <input type="text" id="studentName" autocomplete="off">
+              <div class="msg">Please enter the student's name.</div>
+            </div>
+            <div class="field" id="field-reg">
+              <label for="regNumber">Register Number</label>
+              <input type="text" id="regNumber" autocomplete="off">
+              <div class="msg">Please enter a valid register number.</div>
+            </div>
+            <div class="field" id="field-dept">
+              <label for="department">Department</label>
+              <select id="department">
+                <option value="" disabled selected></option>
+                <option>Computer Science &amp; Engineering</option>
+                <option>Electronics &amp; Communication</option>
+                <option>Electrical &amp; Electronics</option>
+                <option>Mechanical Engineering</option>
+                <option>Civil Engineering</option>
+                <option>Artificial Intelligence &amp; Data Science</option>
+              </select>
+              <div class="msg">Please select a department.</div>
+            </div>
+            <div class="field" id="field-year">
+              <label for="yearStudy">Year of Study</label>
+              <select id="yearStudy">
+                <option value="" disabled selected></option>
+                <option>1st Year</option>
+                <option>2nd Year</option>
+                <option>3rd Year</option>
+                <option>4th Year</option>
+              </select>
+              <div class="msg">Please select the year of study.</div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn-primary" id="displayBtn">Add to Roster</button>
+              <button type="button" class="btn-ghost" id="removeBtn" disabled>Clear All</button>
+            </div>
+            <div class="note">Built with getElementById() &middot; createElement() &middot; textContent &middot; addEventListener() &middot; classList. Each submission adds a new profile card, grouped by year.</div>
+          </form>
+
+          <div class="preview-panel">
+            <div id="previewArea" style="width:100%;">
+              <div class="placeholder" id="placeholderMsg">No profiles registered yet.<br>Fill the form and click &ldquo;Add to Roster&rdquo;.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL 2: RESULT PROCESSING (servlet-logic demo) -->
+      <section class="panel" id="panel-res">
+        <div class="panel-head">
+          <div class="kicker">Server-Side Logic</div>
+          <h3>Result Processing Panel</h3>
+          <p>Mirrors the department's ResultServlet.doPost() &mdash; validates marks, then computes Total, Average, Highest and Pass/Fail.</p>
+        </div>
+
+        <div class="desk-grid">
+          <form id="resForm" novalidate>
+            <div class="field" id="rf-name">
+              <label for="resName">Full Name</label>
+              <input type="text" id="resName" autocomplete="off">
+              <div class="msg">Name is required.</div>
+            </div>
+            <div class="field" id="rf-reg">
+              <label for="resReg">Register Number</label>
+              <input type="text" id="resReg" autocomplete="off">
+              <div class="msg">Register number is required.</div>
+            </div>
+            <div class="field" id="rf-marks">
+              <label>Subjects &amp; Marks (0&ndash;100)</label>
+              <div class="subject-rows">
+                <div class="subject-row">
+                  <input type="text" id="subj1" value="Chemistry" maxlength="40">
+                  <input type="number" id="mark1" min="0" max="100">
+                </div>
+                <div class="subject-row">
+                  <input type="text" id="subj2" value="Physics" maxlength="40">
+                  <input type="number" id="mark2" min="0" max="100">
+                </div>
+                <div class="subject-row">
+                  <input type="text" id="subj3" value="Web Technology" maxlength="40">
+                  <input type="number" id="mark3" min="0" max="100">
+                </div>
+              </div>
+              <div class="msg">Enter a subject name and marks (0&ndash;100) for all three rows.</div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn-primary" id="submitResBtn">Submit for Processing</button>
+              <button type="button" class="btn-ghost" id="clearResBtn" disabled>Clear All</button>
+            </div>
+            <div class="note">Same rules as ResultServlet: missing-value checks, 0&ndash;100 range validation, and Total / Average / Highest / Pass-Fail computed from local, request-scoped values.</div>
+          </form>
+
+          <div class="preview-panel">
+            <div id="resultArea" style="width:100%;">
+              <div class="placeholder" id="resPlaceholder">No results processed yet.<br>Enter marks and click &ldquo;Submit for Processing&rdquo;.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <footer>Saveetha Engineering College &middot; Department of Web Technology Lab &middot; Demonstration Build</footer>
+
+<script>
+
+  /* ---------------- TAB SWITCHING ---------------- */
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = { reg: document.getElementById('panel-reg'), res: document.getElementById('panel-res') };
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      Object.values(panels).forEach(p => p.classList.remove('active'));
+      panels[btn.dataset.tab].classList.add('active');
+    });
+  });
+
+  /* ================= PANEL 1: REGISTRATION (DOM demo) ================= */
+  const displayBtn = document.getElementById('displayBtn');
+  const removeBtn = document.getElementById('removeBtn');
+  const previewArea = document.getElementById('previewArea');
+  const placeholderMsg = document.getElementById('placeholderMsg');
+
+  const regFields = {
+    name: { input: document.getElementById('studentName'), wrap: document.getElementById('field-name') },
+    reg:  { input: document.getElementById('regNumber'),  wrap: document.getElementById('field-reg') },
+    dept: { input: document.getElementById('department'), wrap: document.getElementById('field-dept') },
+    year: { input: document.getElementById('yearStudy'),  wrap: document.getElementById('field-year') }
+  };
+
+  let profiles = [];        // flat list of all profile cards, for count/reset checks
+  let yearGroups = {};       // 'Year label' -> { section, stack, countEl, cards: [] }
+  let rosterInited = false;
+  let rosterTotalEl = null;
+  const YEAR_ORDER = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+
+  function validateReg() {
+    let valid = true;
+    Object.values(regFields).forEach(f => {
+      if (!f.input.value.trim()) { f.wrap.classList.add('error'); valid = false; }
+      else { f.wrap.classList.remove('error'); }
+    });
+    return valid;
+  }
+
+  function initRoster() {
+    if (rosterInited) return;
+    placeholderMsg.style.display = 'none';
+    previewArea.innerHTML = '';
+
+    const head = document.createElement('div');
+    head.className = 'roster-head';
+    const label = document.createElement('span');
+    label.textContent = 'Registered this session, by year';
+    rosterTotalEl = document.createElement('span');
+    rosterTotalEl.className = 'count';
+    head.appendChild(label); head.appendChild(rosterTotalEl);
+    previewArea.appendChild(head);
+
+    rosterInited = true;
+  }
+
+  function ensureYearGroup(year) {
+    initRoster();
+    if (yearGroups[year]) return yearGroups[year];
+
+    const section = document.createElement('div');
+    section.className = 'year-section';
+
+    const header = document.createElement('div');
+    header.className = 'year-header';
+    const yLabel = document.createElement('span');
+    yLabel.className = 'year-label';
+    yLabel.textContent = year;
+    const yCount = document.createElement('span');
+    yCount.className = 'year-count';
+    header.appendChild(yLabel); header.appendChild(yCount);
+
+    const stack = document.createElement('div');
+    stack.className = 'card-stack';
+
+    section.appendChild(header);
+    section.appendChild(stack);
+
+    // insert the section in fixed year order, not insertion order
+    const targetIndex = YEAR_ORDER.indexOf(year);
+    let inserted = false;
+    for (const child of previewArea.querySelectorAll('.year-section')) {
+      const childYear = child.dataset.year;
+      if (YEAR_ORDER.indexOf(childYear) > targetIndex) {
+        previewArea.insertBefore(section, child);
+        inserted = true;
+        break;
+      }
+    }
+    if (!inserted) previewArea.appendChild(section);
+    section.dataset.year = year;
+
+    yearGroups[year] = { section, stack, countEl: yCount, cards: [] };
+    return yearGroups[year];
+  }
+
+  function updateRosterCounts() {
+    if (rosterTotalEl) {
+      rosterTotalEl.textContent = profiles.length + (profiles.length === 1 ? ' profile' : ' profiles');
+    }
+    Object.entries(yearGroups).forEach(([year, group]) => {
+      group.countEl.textContent = group.cards.length + (group.cards.length === 1 ? ' student' : ' students');
+    });
+  }
+
+  function makeRemoveButton(onRemove) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'card-remove';
+    btn.textContent = '\u00d7';
+    btn.setAttribute('aria-label', 'Remove this profile');
+    btn.addEventListener('click', onRemove);
+    return btn;
+  }
+
+  function buildProfileCard(data) {
+    const card = document.createElement('div');
+    card.className = 'profile-card';
+
+    const band = document.createElement('div');
+    band.className = 'band';
+    const role = document.createElement('span');
+    role.className = 'role';
+    role.textContent = 'Student Profile';
+
+    const bandRight = document.createElement('div');
+    bandRight.className = 'band-right';
+    const stamp = document.createElement('span');
+    stamp.className = 'stamp neutral';
+    stamp.textContent = 'DRAFT — NOT SUBMITTED';
+    const removeOne = makeRemoveButton(() => removeProfile(card, data.year));
+    bandRight.appendChild(stamp); bandRight.appendChild(removeOne);
+
+    band.appendChild(role); band.appendChild(bandRight);
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+
+    const nameEl = document.createElement('h3');
+    nameEl.className = 'name';
+    nameEl.textContent = data.name;
+
+    const regEl = document.createElement('div');
+    regEl.className = 'regno';
+    regEl.textContent = 'REG NO. ' + data.reg.toUpperCase();
+
+    const grid = document.createElement('div');
+    grid.className = 'profile-grid';
+    const makeCell = (label, value) => {
+      const cell = document.createElement('div');
+      const k = document.createElement('div'); k.className = 'k'; k.textContent = label;
+      const v = document.createElement('div'); v.className = 'v'; v.textContent = value;
+      cell.appendChild(k); cell.appendChild(v);
+      return cell;
+    };
+    grid.appendChild(makeCell('Department', data.dept));
+    grid.appendChild(makeCell('Year of Study', data.year));
+
+    body.appendChild(nameEl); body.appendChild(regEl); body.appendChild(grid);
+    card.appendChild(band); card.appendChild(body);
+    return card;
+  }
+
+  function removeProfile(card, year) {
+    card.classList.add('removing');
+    card.addEventListener('animationend', () => {
+      card.remove();
+      profiles = profiles.filter(c => c !== card);
+      const group = yearGroups[year];
+      if (group) {
+        group.cards = group.cards.filter(c => c !== card);
+        if (group.cards.length === 0) {
+          group.section.remove();
+          delete yearGroups[year];
+        }
+      }
+      updateRosterCounts();
+      if (profiles.length === 0) resetRoster();
+    }, { once: true });
+  }
+
+  function resetRoster() {
+    previewArea.innerHTML = '';
+    previewArea.appendChild(placeholderMsg);
+    placeholderMsg.style.display = 'block';
+    yearGroups = {};
+    rosterInited = false;
+    rosterTotalEl = null;
+    removeBtn.disabled = true;
+  }
+
+  displayBtn.addEventListener('click', () => {
+    if (!validateReg()) return;
+    const data = {
+      name: regFields.name.input.value.trim(),
+      reg: regFields.reg.input.value.trim(),
+      dept: regFields.dept.input.value,
+      year: regFields.year.input.value
+    };
+    const group = ensureYearGroup(data.year);
+    const card = buildProfileCard(data);
+    group.stack.appendChild(card);
+    group.cards.push(card);
+    profiles.push(card);
+    updateRosterCounts();
+    removeBtn.disabled = false;
+
+    // clear the form for the next entry
+    regFields.name.input.value = '';
+    regFields.reg.input.value = '';
+    regFields.dept.input.selectedIndex = 0;
+    regFields.year.input.selectedIndex = 0;
+    regFields.name.input.focus();
+  });
+
+  removeBtn.addEventListener('click', () => {
+    if (profiles.length === 0) return;
+    Object.entries(yearGroups).forEach(([year, group]) => {
+      group.cards.slice().forEach(card => removeProfile(card, year));
+    });
+  });
+
+  /* ================= PANEL 2: RESULT PROCESSING (mirrors ResultServlet.doPost) ================= */
+  const submitResBtn = document.getElementById('submitResBtn');
+  const clearResBtn = document.getElementById('clearResBtn');
+  const resultArea = document.getElementById('resultArea');
+  const resPlaceholder = document.getElementById('resPlaceholder');
+  const PASS_MARK = 35;
+
+  const rfName = document.getElementById('resName');
+  const rfReg = document.getElementById('resReg');
+  const rfMarksWrap = document.getElementById('rf-marks');
+  const s1 = document.getElementById('subj1'), s2 = document.getElementById('subj2'), s3 = document.getElementById('subj3');
+  const m1 = document.getElementById('mark1'), m2 = document.getElementById('mark2'), m3 = document.getElementById('mark3');
+  const nameWrap = document.getElementById('rf-name'), regWrap = document.getElementById('rf-reg');
+
+  let results = [];        // roster of processed result cards
+  let resStackEl = null;
+  let resCountEl = null;
+
+  function parseMark(el) {
+    const raw = el.value.trim();
+    if (raw === '') return { error: true };
+    const val = Number(raw);
+    if (!Number.isFinite(val) || val < 0 || val > 100) return { error: true };
+    return { error: false, val: Math.round(val) };
+  }
+
+  function ensureResStack() {
+    if (resStackEl) return resStackEl;
+    resPlaceholder.style.display = 'none';
+    resultArea.innerHTML = '';
+
+    const head = document.createElement('div');
+    head.className = 'roster-head';
+    const label = document.createElement('span');
+    label.textContent = 'Processed this session';
+    resCountEl = document.createElement('span');
+    resCountEl.className = 'count';
+    head.appendChild(label); head.appendChild(resCountEl);
+
+    resStackEl = document.createElement('div');
+    resStackEl.className = 'card-stack';
+
+    resultArea.appendChild(head);
+    resultArea.appendChild(resStackEl);
+    return resStackEl;
+  }
+
+  function updateResCount() {
+    if (resCountEl) {
+      resCountEl.textContent = results.length + (results.length === 1 ? ' result' : ' results');
+    }
+  }
+
+  function removeResult(card) {
+    card.classList.add('removing');
+    card.addEventListener('animationend', () => {
+      card.remove();
+      results = results.filter(c => c !== card);
+      updateResCount();
+      if (results.length === 0) resetResRoster();
+    }, { once: true });
+  }
+
+  function resetResRoster() {
+    resultArea.innerHTML = '';
+    resultArea.appendChild(resPlaceholder);
+    resPlaceholder.style.display = 'block';
+    resStackEl = null;
+    resCountEl = null;
+    clearResBtn.disabled = true;
+  }
+
+  function buildResultCard(name, reg, subjects, marks, total, avg, highest, pass) {
+    const card = document.createElement('div');
+    card.className = 'result-card';
+
+    const band = document.createElement('div');
+    band.className = 'band';
+    const role = document.createElement('span'); role.className = 'role'; role.textContent = 'Result Card';
+
+    const bandRight = document.createElement('div');
+    bandRight.className = 'band-right';
+    const stamp = document.createElement('span');
+    stamp.className = 'stamp ' + (pass ? 'pass' : 'fail');
+    stamp.textContent = pass ? 'PASS' : 'FAIL';
+    const removeOne = makeRemoveButton(() => removeResult(card));
+    bandRight.appendChild(stamp); bandRight.appendChild(removeOne);
+
+    band.appendChild(role); band.appendChild(bandRight);
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+
+    const nameEl = document.createElement('h3'); nameEl.className = 'name'; nameEl.textContent = name;
+    const regEl = document.createElement('div'); regEl.className = 'regno'; regEl.textContent = 'REG NO. ' + reg.toUpperCase();
+
+    const table = document.createElement('table');
+    table.className = 'marks';
+    const thead = document.createElement('tr');
+    ['Subject', 'Marks'].forEach(t => { const th = document.createElement('th'); th.textContent = t; thead.appendChild(th); });
+    table.appendChild(thead);
+    marks.forEach((mk, i) => {
+      const tr = document.createElement('tr');
+      const td1 = document.createElement('td'); td1.textContent = subjects[i];
+      const td2 = document.createElement('td'); td2.textContent = mk + ' / 100';
+      tr.appendChild(td1); tr.appendChild(td2);
+      table.appendChild(tr);
+    });
+
+    const stats = document.createElement('div');
+    stats.className = 'stats';
+    const makeStat = (label, value) => {
+      const s = document.createElement('div'); s.className = 'stat';
+      const k = document.createElement('div'); k.className = 'k'; k.textContent = label;
+      const v = document.createElement('div'); v.className = 'v'; v.textContent = value;
+      s.appendChild(k); s.appendChild(v);
+      return s;
+    };
+    stats.appendChild(makeStat('Total', total));
+    stats.appendChild(makeStat('Average', avg.toFixed(2)));
+    stats.appendChild(makeStat('Highest', highest));
+
+    body.appendChild(nameEl); body.appendChild(regEl); body.appendChild(table); body.appendChild(stats);
+    card.appendChild(band); card.appendChild(body);
+    return card;
+  }
+
+  function buildErrorCard(messages) {
+    const card = document.createElement('div');
+    card.className = 'error-card';
+    const band = document.createElement('div');
+    band.className = 'band';
+    const role = document.createElement('span'); role.className = 'role'; role.textContent = 'Submission Rejected';
+
+    const bandRight = document.createElement('div');
+    bandRight.className = 'band-right';
+    const stamp = document.createElement('span'); stamp.className = 'stamp fail'; stamp.textContent = 'INVALID';
+    const removeOne = makeRemoveButton(() => removeResult(card));
+    bandRight.appendChild(stamp); bandRight.appendChild(removeOne);
+
+    band.appendChild(role); band.appendChild(bandRight);
+
+    const body = document.createElement('div'); body.className = 'card-body';
+    const h4 = document.createElement('h4'); h4.textContent = 'Validation errors';
+    const p = document.createElement('p'); p.textContent = messages.join(' ');
+    body.appendChild(h4); body.appendChild(p);
+
+    card.appendChild(band); card.appendChild(body);
+    return card;
+  }
+
+  submitResBtn.addEventListener('click', () => {
+    // Reset error states (mirrors servlet re-validating every request independently)
+    [nameWrap, regWrap, rfMarksWrap].forEach(w => w.classList.remove('error'));
+    const errors = [];
+
+    const name = rfName.value.trim();
+    const reg = rfReg.value.trim();
+    if (!name) { nameWrap.classList.add('error'); errors.push('Name is required.'); }
+    if (!reg) { regWrap.classList.add('error'); errors.push('Register Number is required.'); }
+
+    const subjectNames = [s1.value.trim(), s2.value.trim(), s3.value.trim()];
+    const r1 = parseMark(m1), r2 = parseMark(m2), r3 = parseMark(m3);
+    if (r1.error || r2.error || r3.error) {
+      rfMarksWrap.classList.add('error');
+      errors.push('Marks are required for all three subjects, each between 0 and 100.');
+    }
+    if (subjectNames.some(s => !s)) {
+      rfMarksWrap.classList.add('error');
+      errors.push('Every subject needs a name.');
+    }
+
+    const stack = ensureResStack();
+
+    if (errors.length > 0) {
+      const card = buildErrorCard(errors);
+      stack.appendChild(card);
+      results.push(card);
+      updateResCount();
+      clearResBtn.disabled = false;
+      return;
+    }
+
+    // ---- local, request-scoped calculation (mirrors doPost) ----
+    const marks = [r1.val, r2.val, r3.val];
+    const total = marks[0] + marks[1] + marks[2];
+    const avg = total / 3;
+    const highest = Math.max(marks[0], marks[1], marks[2]);
+    const pass = marks.every(m => m >= PASS_MARK);
+
+    const card = buildResultCard(name, reg, subjectNames, marks, total, avg, highest, pass);
+    stack.appendChild(card);
+    results.push(card);
+    updateResCount();
+    clearResBtn.disabled = false;
+
+    // clear the form for the next entry (subject names stay, marks reset)
+    rfName.value = '';
+    rfReg.value = '';
+    m1.value = ''; m2.value = ''; m3.value = '';
+    rfName.focus();
+  });
+
+  clearResBtn.addEventListener('click', () => {
+    if (results.length === 0) return;
+    results.slice().forEach(card => removeResult(card));
+  });
+
+</script>
+</body>
+</html>
