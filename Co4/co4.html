@@ -1,0 +1,974 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>University Enrollment Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #eef3f8;
+            color: #1e293b;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            background: #0f172a;
+            color: white;
+            padding: 30px 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 45px;
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+            background: #2563eb;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .brand h2 {
+            font-size: 18px;
+        }
+
+        .brand span {
+            display: block;
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .menu-title {
+            color: #64748b;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            padding: 14px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .menu li:hover,
+        .menu .active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .menu li span {
+            margin-right: 12px;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 245px;
+            min-height: 100vh;
+        }
+
+        /* ================= TOPBAR ================= */
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .topbar h1 {
+            font-size: 21px;
+            color: #0f172a;
+        }
+
+        .topbar p {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-circle {
+            width: 40px;
+            height: 40px;
+            background: #dbeafe;
+            color: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            padding: 35px 40px;
+        }
+
+        .welcome {
+            background: linear-gradient(120deg, #1d4ed8, #2563eb, #3b82f6);
+            color: white;
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome::after {
+            content: "🎓";
+            position: absolute;
+            right: 55px;
+            top: 10px;
+            font-size: 100px;
+            opacity: 0.15;
+        }
+
+        .welcome h2 {
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* ================= STAT CARDS ================= */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 23px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 11px;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .card-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #0f172a;
+        }
+
+        .card-name {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .growth {
+            font-size: 11px;
+            color: #16a34a;
+            background: #dcfce7;
+            padding: 5px 8px;
+            border-radius: 15px;
+        }
+
+        /* ================= TABLE SECTION ================= */
+
+        .table-box {
+            background: white;
+            border-radius: 18px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 25px 28px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 {
+            color: #0f172a;
+            font-size: 20px;
+        }
+
+        .table-header p {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .filter {
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 9px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th {
+            text-align: left;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            padding: 16px 20px;
+        }
+
+        td {
+            padding: 18px 20px;
+            border-top: 1px solid #f1f5f9;
+            font-size: 13px;
+        }
+
+        tbody tr {
+            transition: 0.25s;
+        }
+
+        tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        /* Ranking */
+
+        .rank {
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            background: #f1f5f9;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .rank.first {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .rank.second {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        /* Course */
+
+        .course {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .course-name {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .faculty {
+            color: #64748b;
+        }
+
+        /* Students */
+
+        .student-number {
+            font-weight: bold;
+            margin-bottom: 7px;
+            display: block;
+        }
+
+        .progress {
+            width: 100px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress span {
+            display: block;
+            height: 100%;
+            background: #2563eb;
+            border-radius: 10px;
+        }
+
+        /* Credits */
+
+        .credit {
+            display: inline-block;
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 7px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        /* Type */
+
+        .type {
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .theory {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .practical {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            padding: 25px 40px;
+            color: #94a3b8;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1100px) {
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+            }
+        }
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .content {
+                padding: 25px 20px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🎓
+            </div>
+
+            <div>
+                <h2>UniAnalytics</h2>
+                <span>Academic Portal</span>
+            </div>
+
+        </div>
+
+        <p class="menu-title">Main Menu</p>
+
+        <ul class="menu">
+
+            <li class="active">
+                <span>📊</span>
+                Dashboard
+            </li>
+
+            <li>
+                <span>📚</span>
+                Courses
+            </li>
+
+            <li>
+                <span>👨‍🎓</span>
+                Students
+            </li>
+
+            <li>
+                <span>👨‍🏫</span>
+                Faculty
+            </li>
+
+            <li>
+                <span>📈</span>
+                Reports
+            </li>
+
+        </ul>
+
+        <div class="sidebar-bottom">
+            <strong>Semester 2026</strong>
+            <br><br>
+            Enrollment analysis is based on current course records.
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+                <h1>Course Enrollment Analysis</h1>
+                <p>Academic Office • Semester Workload Report</p>
+            </div>
+
+            <div class="profile">
+
+                <div>
+                    <strong>Academic Office</strong>
+                </div>
+
+                <div class="profile-circle">
+                    AO
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <main class="content">
+
+            <!-- WELCOME -->
+
+            <section class="welcome">
+
+                <h2>High Enrollment Courses</h2>
+
+                <p>
+                    Courses with more than 40 students,
+                    arranged according to student enrollment.
+                </p>
+
+            </section>
+
+
+            <!-- STATISTICS -->
+
+            <section class="cards">
+
+                <div class="card">
+
+                    <div class="card-top">
+
+                        <div class="card-icon">
+                            📚
+                        </div>
+
+                        <span class="growth">
+                            Active
+                        </span>
+
+                    </div>
+
+                    <div class="card-value">
+                        4
+                    </div>
+
+                    <div class="card-name">
+                        High Enrollment Courses
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-top">
+
+                        <div class="card-icon">
+                            👨‍🎓
+                        </div>
+
+                        <span class="growth">
+                            Students
+                        </span>
+
+                    </div>
+
+                    <div class="card-value">
+                        236
+                    </div>
+
+                    <div class="card-name">
+                        Students in Listed Courses
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-top">
+
+                        <div class="card-icon">
+                            🎯
+                        </div>
+
+                        <span class="growth">
+                            Credits
+                        </span>
+
+                    </div>
+
+                    <div class="card-value">
+                        15
+                    </div>
+
+                    <div class="card-name">
+                        Total Course Credits
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-top">
+
+                        <div class="card-icon">
+                            📊
+                        </div>
+
+                        <span class="growth">
+                            Average
+                        </span>
+
+                    </div>
+
+                    <div class="card-value">
+                        59
+                    </div>
+
+                    <div class="card-name">
+                        Average Enrollment
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- TABLE -->
+
+            <section class="table-box">
+
+                <div class="table-header">
+
+                    <div>
+
+                        <h2>Course Enrollment Details</h2>
+
+                        <p>
+                            Showing courses with more than 40 students
+                        </p>
+
+                    </div>
+
+                    <div class="filter">
+                        ↓ Highest Enrollment
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Rank</th>
+                                <th>Course</th>
+                                <th>Faculty</th>
+                                <th>Students</th>
+                                <th>Credits</th>
+                                <th>Type</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <!-- Rank 1 -->
+
+                            <tr>
+
+                                <td>
+                                    <span class="rank first">
+                                        1
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div class="course">
+                                        AI302
+                                    </div>
+
+                                    <div class="course-name">
+                                        Artificial Intelligence
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <span class="faculty">
+                                        Dr. Meena
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="student-number">
+                                        72
+                                    </span>
+
+                                    <div class="progress">
+                                        <span style="width:100%;"></span>
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <span class="credit">
+                                        4 Credits
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="type theory">
+                                        Theory
+                                    </span>
+                                </td>
+
+                            </tr>
+
+
+                            <!-- Rank 2 -->
+
+                            <tr>
+
+                                <td>
+                                    <span class="rank second">
+                                        2
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div class="course">
+                                        ML304
+                                    </div>
+
+                                    <div class="course-name">
+                                        Machine Learning
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <span class="faculty">
+                                        Dr. Priya
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="student-number">
+                                        64
+                                    </span>
+
+                                    <div class="progress">
+                                        <span style="width:89%;"></span>
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <span class="credit">
+                                        4 Credits
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="type theory">
+                                        Theory
+                                    </span>
+                                </td>
+
+                            </tr>
+
+
+                            <!-- Rank 3 -->
+
+                            <tr>
+
+                                <td>
+                                    <span class="rank">
+                                        3
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div class="course">
+                                        WEB301
+                                    </div>
+
+                                    <div class="course-name">
+                                        Web Technology
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <span class="faculty">
+                                        Dr. Arun
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="student-number">
+                                        58
+                                    </span>
+
+                                    <div class="progress">
+                                        <span style="width:81%;"></span>
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <span class="credit">
+                                        4 Credits
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="type theory">
+                                        Theory
+                                    </span>
+                                </td>
+
+                            </tr>
+
+
+                            <!-- Rank 4 -->
+
+                            <tr>
+
+                                <td>
+                                    <span class="rank">
+                                        4
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div class="course">
+                                        DB305
+                                    </div>
+
+                                    <div class="course-name">
+                                        Database Systems
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <span class="faculty">
+                                        Dr. Kumar
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="student-number">
+                                        42
+                                    </span>
+
+                                    <div class="progress">
+                                        <span style="width:58%;"></span>
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <span class="credit">
+                                        3 Credits
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="type theory">
+                                        Theory
+                                    </span>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+            University Academic Office © 2026
+            <br>
+            Course Enrollment Analysis System
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
+```
+
